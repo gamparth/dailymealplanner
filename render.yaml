@@ -3,11 +3,15 @@ services:
   - type: web
     name: if-meal-planner
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
-        value: 3.9.18  # Updated to specific version
+        value: 3.9.18
+      - key: PORT
+        value: 10000
       - key: GOOGLE_APPLICATION_CREDENTIALS
         sync: false
     autoDeploy: true
