@@ -1,5 +1,6 @@
 # requirements.txt
-flask==2.0.1
+Flask==2.0.1
+Werkzeug==2.0.3
 gunicorn==20.1.0
 python-dotenv==0.19.0
 google-cloud-texttospeech==2.11.0
