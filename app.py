@@ -11,6 +11,7 @@ from google.oauth2 import service_account
 import tempfile
 from translate import Translator
 import logging
+import base64
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -78,7 +79,10 @@ class HindiVoiceGenerator:
                 audio_config=audio_config
             )
             
-            return response.audio_content
+            # Convert bytes to base64 string
+            audio_base64 = base64.b64encode(response.audio_content).decode('utf-8')
+            return audio_base64
+            
         except Exception as e:
             logger.error(f"Error generating voice message: {str(e)}")
             raise
@@ -118,22 +122,6 @@ class MealPlanner:
                         "5. Cook brown rice",
                         "6. Prepare fresh salad"
                     ]
-                },
-                {
-                    "name": "Quinoa Bowl with Grilled Vegetables",
-                    "prep_time": "35 mins",
-                    "calories": 480,
-                    "protein": "18g",
-                    "carbs": "58g",
-                    "fats": "16g",
-                    "instructions": [
-                        "1. Rinse quinoa thoroughly",
-                        "2. Cook quinoa with vegetable stock",
-                        "3. Grill assorted vegetables",
-                        "4. Prepare lemon-herb dressing",
-                        "5. Assemble bowl",
-                        "6. Add toasted seeds"
-                    ]
                 }
             ],
             "dinner": [
@@ -150,21 +138,6 @@ class MealPlanner:
                         "3. Prepare tempering",
                         "4. Pressure cook everything",
                         "5. Add ghee and cumin"
-                    ]
-                },
-                {
-                    "name": "Grilled Paneer with Mint Chutney",
-                    "prep_time": "25 mins",
-                    "calories": 450,
-                    "protein": "22g",
-                    "carbs": "48g",
-                    "fats": "16g",
-                    "instructions": [
-                        "1. Marinate paneer",
-                        "2. Prepare mint chutney",
-                        "3. Grill paneer",
-                        "4. Steam vegetables",
-                        "5. Serve with multigrain roti"
                     ]
                 },
                 {
@@ -227,7 +200,6 @@ Instructions:
 • Total Fats: {meal_plan['total_fats']}
 
 💧 Remember to stay hydrated during fasting hours!
-👩‍🍳 Voice instructions in Hindi will follow.
 """
 
     def format_voice_content(self, meal_plan):
@@ -300,20 +272,6 @@ def get_tomorrow_meals():
             "error": str(e),
             "message": "Failed to generate meal plan"
         }), 500
-
-@app.errorhandler(404)
-def not_found(e):
-    return jsonify({
-        "error": "Not found",
-        "message": "The requested resource does not exist"
-    }), 404
-
-@app.errorhandler(500)
-def server_error(e):
-    return jsonify({
-        "error": "Internal server error",
-        "message": "An unexpected error occurred"
-    }), 500
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
