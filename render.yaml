@@ -1,0 +1,13 @@
+# render.yaml
+services:
+  - type: web
+    name: if-meal-planner
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.18  # Updated to specific version
+      - key: GOOGLE_APPLICATION_CREDENTIALS
+        sync: false
+    autoDeploy: true
